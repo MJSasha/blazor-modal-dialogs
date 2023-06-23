@@ -107,12 +107,44 @@ Specify the `InputDialog` layout:
 }
 ```
 
+Create `DialogsRegistrationForm`
+
+```csharp
+@using <...>.InputDialog;
+
+<InputDialog/>
+```
+
+Put `DialogsRegistrationForm` to `MainLayout`
+
+```csharp
+@inherits LayoutComponentBase
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<div class="top-row px-2">
+			
+		</div>
+
+		<article>
+			@Body
+		</article>
+	</main>
+</div>
+<DialogsRegistrationForm />
+```
+
 You can then:
 
 - Show the dialog and get the input result:
 
   ```csharp
   var result = await dialogsService.Show<InputDialog, InputDialogParameters
+  ```
 
 - Close dialog
 
