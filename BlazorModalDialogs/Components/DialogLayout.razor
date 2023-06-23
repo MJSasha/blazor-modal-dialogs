@@ -1,0 +1,16 @@
+@inject DialogsService dialogsService
+
+@if (IsDisplayed)
+{
+    <div class="dialog-layout">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsDisplayed { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

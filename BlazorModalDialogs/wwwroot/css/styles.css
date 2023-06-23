@@ -1,0 +1,10 @@
+.dialog-layout {
+    background-color: #00000099;
+    height: 100%;
+    width: 100%;
+    display: block;
+    z-index: 999999 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
