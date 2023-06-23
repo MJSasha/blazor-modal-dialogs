@@ -143,7 +143,7 @@ You can then:
 - Show the dialog and get the input result:
 
   ```csharp
-  var result = await dialogsService.Show<InputDialog, InputDialogParameters
+  var result = await dialogsService.Show<InputDialog, InputDialogParameters, string>(new InputDialogParameters { Title = "Some title" });
   ```
 
 - Close dialog
