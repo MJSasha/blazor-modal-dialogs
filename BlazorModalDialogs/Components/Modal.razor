@@ -1,5 +1,5 @@
 <div class="modal fade show" tabindex="-1" role="dialog" style="display: block; overflow-x: hidden; overflow-y: auto; opacity: 1;" aria-labelledby="addCompanyModalLabel" aria-hidden="true" @onkeypress="OnKeyPress">
-    <div class="modal-dialog @(DispalyCenter ? "modal-dialog-centered" : "")" role="document">
+    <div class="modal-dialog @ModalSize.GetModalSizeClass() @(DispalyCenter ? "modal-dialog-centered" : "")" role="document">
         <div class="modal-content p-3">
             <div class="d-flex flex-row mb-3">
                 <h4 class="text-break me-2" id="addCompanyModalLabel">@Title</h4>
@@ -34,6 +34,9 @@
 
     [Parameter]
     public bool DispalyCenter { get; set; }
+
+    [Parameter]
+    public ModalSize ModalSize { get; set; } = ModalSize.Medium;
 
     [Parameter]
     public Action OnClose { get; set; }
