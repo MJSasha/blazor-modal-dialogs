@@ -1,0 +1,36 @@
+@DynamicComponents
+
+@code {
+    [Inject]
+    public DialogsService DialogsService { get; set; }
+
+    private RenderFragment DynamicComponents { get; set; }
+    private int componentsCounter;
+
+    protected override void OnInitialized()
+    {
+        if (DialogsService.DialogsClasses != null)
+        {
+            foreach (var className in DialogsService.DialogsClasses)
+            {
+                var dialog = new RenderFragment(builder =>
+                {
+                    builder.OpenComponent(0, className);
+                    builder.CloseComponent();
+                });
+                AddComponent(dialog);
+            }
+
+            DialogsService.DialogsClasses = null;
+        }
+    }
+
+    private void AddComponent(RenderFragment component)
+    {
+        DynamicComponents += builder =>
+        {
+            builder.AddContent(componentsCounter++, component);
+        };
+        StateHasChanged();
+    }
+}

@@ -32,7 +32,7 @@ To utilize Blazor Modal Dialogs in your application, follow these steps:
 
    ```csharp
    @using BlazorModalDialogs
-   @using BlazorModalDialogs.Components
+   @using BlazorModalDialogs.Components // Optional, if you want to use pre-made components
    ```
 
 2. Add styles to the `index.html` file:
@@ -41,10 +41,10 @@ To utilize Blazor Modal Dialogs in your application, follow these steps:
    <link href="_content/BlazorModalDialogs/css/styles.css" rel="stylesheet" />
    ```
 
-3. Register the `DialogsService` in dependency injection (DI) in your application's `Startup.cs` or `Program.cs`:
+3. Use `AddModalDialogs` in dependency injection (DI) in your application's `Startup.cs` or `Program.cs` file. **Modal dialog classes** - classes of your modal windows, which will be automatically added to the markup when you use `DialogProvider` (see step 6 for more details):
 
    ```csharp
-   builder.Services.AddSingleton<DialogsService>();
+   builder.Services.AddModalDialogs([Modal dialogs classes, like: typeof(...), typeof(...), ...]);
    ```
 
 4. In your Blazor component, inject the `DialogsService`:
@@ -58,6 +58,29 @@ To utilize Blazor Modal Dialogs in your application, follow these steps:
    ```csharp
    {ResultType} someResult = await dialogsService.Show<{DialogClass}, {DialogParamsClass}, {ResultType}>(new {DialogParamsClass} { ... });
    ```
+
+6. *Optional*: If you want to use the automatic addition of modal windows, add the `DialogProvider` component to `MainLayout`. If you don't want to use this option, just place your modal windows in the markup where you want ([example *Dialog Example*](#dialog-example)).
+
+    ```csharp
+    @inherits LayoutComponentBase
+
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <main>
+            <div class="top-row px-4">
+                <a href="/" target="_blank">About</a>
+            </div>
+
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
+    <DialogProvider />
+    ```
 
 ## Dialog Example
 
@@ -78,7 +101,9 @@ Specify the `InputDialog` layout:
 @inherits Dialog<InputDialogParameters, string>
 
 <DialogLayout IsDisplayed="IsDisplayed">
-    <Modal Title="@Params.Title" OnClose="() => this.Cancel()" DisplayCenter="true" OnKeyEnterPressed="OnKeyEnterPressed">
+    <Modal Title="@Params.Title" OnClose="
+
+() => this.Cancel()" DisplayCenter="true" OnKeyEnterPressed="OnKeyEnterPressed">
         <Content>
             <input type="text" class="form-control mt-2" @bind-value="Value" @bind-value:event="oninput" />
         </Content>
@@ -115,7 +140,7 @@ Create `DialogsRegistrationForm`
 <InputDialog/>
 ```
 
-Put `DialogsRegistrationForm` to `MainLayout`
+Put `DialogsRegistrationForm` in `MainLayout`
 
 ```csharp
 @inherits LayoutComponentBase
@@ -146,8 +171,8 @@ You can then:
   var result = await dialogsService.Show<InputDialog, InputDialogParameters, string>(new InputDialogParameters { Title = "Some title" });
   ```
 
-- Close dialog
+- Close the dialog:
 
-    ```csharp
-    await dialogsService.Close<InputDialog, InputDialogParameters, string>();
-    ```
+  ```csharp
+  await dialogsService.Hide<InputDialog, InputDialogParameters, string>();
+  ```

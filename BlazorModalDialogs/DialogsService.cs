@@ -4,13 +4,13 @@ namespace BlazorModalDialogs
 {
     public class DialogsService
     {
+        internal Type[] DialogsClasses { get; set; }
+
         private List<object> dialogs = new();
 
-        internal void RegisterDialog<TDialog>(TDialog dialog)
+        public DialogsService(Type[] dialogsClasses)
         {
-            var registeredDialog = dialogs.SingleOrDefault(d => d.GetType() == typeof(TDialog));
-            if (registeredDialog != null) throw new KeyNotFoundException($"Dialog ${typeof(TDialog)} already exist");
-            dialogs.Add(dialog);
+            DialogsClasses = dialogsClasses;
         }
 
         public Task<TResult> Show<TDialog, TParams, TResult>(TParams parameters) where TDialog : Dialog<TParams, TResult>
@@ -23,6 +23,15 @@ namespace BlazorModalDialogs
         public void Hide<TDialog, TParams, TResult>() where TDialog : Dialog<TParams, TResult>
         {
             (dialogs.SingleOrDefault(d => d.GetType() == typeof(TDialog)) as TDialog).Hide();
+        }
+
+        internal void RegisterDialog<TDialog>(TDialog dialog)
+        {
+            var registeredDialog = dialogs.SingleOrDefault(d => d.GetType() == typeof(TDialog));
+            if (registeredDialog == null)
+            {
+                dialogs.Add(dialog);
+            }
         }
     }
 }
